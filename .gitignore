@@ -1,0 +1,3 @@
+test-output/
+.agent-handoff/
+node_modules/
