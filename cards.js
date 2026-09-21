@@ -1,6 +1,6 @@
 'use strict';
-document.title='可编辑卡片工作台 V1.1';
-document.querySelector('header h1').textContent='可编辑卡片工作台 V1.1';
+document.title='可编辑卡片工作台 V1.2';
+document.querySelector('header h1').textContent='可编辑卡片工作台 V1.2';
 document.querySelector('header a').textContent='使用说明';
 document.querySelector('header a').href='README.md';
 const $=id=>document.getElementById(id);
@@ -16,6 +16,8 @@ let kind='recruitment',values={...specs[kind].demo},dirty=false,renderValid=fals
 const configIds=['ratio','titleSize','bodySize','lineHeight','background','ink','accent'];
 const defaults={ratio:'1440',titleSize:'64',bodySize:'34',lineHeight:'1.55',background:'#ffffff',ink:'#183e53',accent:'#177da2'};
 const canvas=$('preview'),ctx=canvas.getContext('2d');
+const contrastNote=document.createElement('p');contrastNote.id='contrastNote';contrastNote.className='notice';contrastNote.setAttribute('role','status');contrastNote.setAttribute('aria-live','polite');$('accent').closest('.row').after(contrastNote);
+function updateContrast(c){const pairs=[['正文',c.ink],['强调文字',c.accent]];contrastNote.textContent=pairs.map(([label,color])=>{const r=CardContrast.ratio(color,c.background);return label+' / 背景 '+r.toFixed(3)+':1：'+(CardContrast.meetsReference(r)?'达到4.5参考值':'低于4.5参考值，建议调整');}).join('；')+'。比值仅显示三位小数，判定使用未舍入值。仅检查所选纯色，不代表完整无障碍合规；最终显示尺寸和字体需人工检查。不会自动改色或阻止导出。';}
 Object.entries(specs).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.name;$('template').append(o);});
 function consent(){return !dirty||confirm('当前编辑尚未保存为可编辑稿，继续会替换或清空它。是否继续？');}
 function fields(){ $('fields').replaceChildren();for(const [key,label] of specs[kind].fields){const l=document.createElement('label');l.htmlFor='f_'+key;l.textContent=label;const input=document.createElement(key==='title'||key.endsWith('Title')?'input':'textarea');input.id='f_'+key;input.value=values[key]||'';input.addEventListener('input',()=>{values[key]=input.value;dirty=true;revision++;render();});$('fields').append(l,input);}}
@@ -23,7 +25,7 @@ function cfg(){const c=Object.fromEntries(configIds.map(k=>[k,$(k).value]));c.ti
 function font(size,bold=false){ctx.font=(bold?'700 ':'400 ')+size+'px "Microsoft YaHei","PingFang SC",sans-serif';}
 function wrap(text,width,size,bold=false){font(size,bold);let lines=[];for(const paragraph of String(text).split('\n')){let current='';const segments=typeof Intl.Segmenter==='function'?[...new Intl.Segmenter('zh',{granularity:'grapheme'}).segment(paragraph)].map(s=>s.segment):Array.from(paragraph);for(const char of segments){if(current&&ctx.measureText(current+char).width>width){lines.push(current);current=char;}else current+=char;}lines.push(current);}return lines;}
 function render(){
- const c=cfg();renderValid=false;$('export').disabled=true;
+ const c=cfg();updateContrast(c);renderValid=false;$('export').disabled=true;
  for(const [key,label] of specs[kind].fields){const limit=key==='title'?600:10000;if((values[key]||'').length>limit){status(label+'超过'+limit+'字符；输入已保留但暂停预览和导出，请精简后继续。',true);return;}}
  if(!Number.isFinite(c.titleSize)||c.titleSize<32||c.titleSize>100||!Number.isFinite(c.bodySize)||c.bodySize<22||c.bodySize>60||!Number.isFinite(c.lineHeight)||c.lineHeight<1.15||c.lineHeight>2.2){status('字号或行距超出允许范围，请调整后继续。',true);return;}
  const ops=[];let y=160;

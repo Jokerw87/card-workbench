@@ -11,3 +11,8 @@ Desktop and 390px screenshots were visually inspected. Narrow layout was checked
 Method: baseline reproduction, targeted regression, existing browser suite and same-agent source/visual inspection. No independent cross-model review. All fixtures are fictional. No paid API, customer data, telemetry or dependency installation used.
 
 Not verified: Android/iOS hardware, installed user Edge/Chrome versions, Safari/Firefox, browser crash recovery, system power loss, malicious browser extensions, actual recipient use or commercial outcomes. Browser downloads still require users to confirm files were saved. No absolute safety claim.
+# V1.2 targeted contrast checks — 2026-09-22
+
+Six groups PASS: known mathematical ratios and unrounded thresholds; immediate low-contrast warning without export blocking; reset refresh and pixel preservation; existing JSON schema roundtrip and import refresh; low-contrast PNG export; whole default canvas PNG byte equality with V1.1. Chromium 151.0.7922.34, offline browser context.
+
+Desktop 1360px and narrow 390px screenshots of the warning area visually inspected: text wraps, actions remain separate, document width equals viewport width. This is not mobile hardware, screenreader, physical printing or complete WCAG validation. Prior unchanged rendering/race tests below are inherited evidence, not rerun. V1.2 publication pending at test checkpoint.

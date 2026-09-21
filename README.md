@@ -1,4 +1,12 @@
-# 可编辑卡片工作台 V1.1 / Card Workbench
+# 可编辑卡片工作台 V1.2 / Card Workbench
+
+## V1.2 可读性参考
+
+颜色设置下新增正文/背景、强调文字/背景的对比度比值。低于4.5时提示调整，但不自动改色或阻止导出。仅检查所选不透明纯色；并非完整无障碍合规认证或印刷效果保证。不能仅凭画布字号判断最终显示是否属于大字。
+
+使用 sRGB 相对亮度计算，显示三位小数但阈值判定不舍入。依据：[W3C 对比度说明](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)。JSON 仍为 version 1，渲染布局和像素生成未改变。已有稿件不需要转换。
+
+新增 `test-contrast.cjs`，使用已有 Playwright（PLAYWRIGHT_MODULE）。可选 CARD_BASELINE 指向原版目录，比较默认画布完整 PNG 字节。不安装依赖也能正常使用工具。
 
 六种离线文字卡片：招聘、通知、步骤、知识卡片、对比说明和项目案例。独立浏览器工具，无账号、云同步、运行时依赖、图片 API 或外部字体。
 
