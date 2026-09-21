@@ -1,6 +1,6 @@
 'use strict';
-document.title='可编辑卡片工作台 V1.2';
-document.querySelector('header h1').textContent='可编辑卡片工作台 V1.2';
+document.title='可编辑卡片工作台 V1.3';
+document.querySelector('header h1').textContent='可编辑卡片工作台 V1.3';
 document.querySelector('header a').textContent='使用说明';
 document.querySelector('header a').href='README.md';
 const $=id=>document.getElementById(id);
@@ -76,3 +76,7 @@ $('draftFile').onchange=async()=>{const file=$('draftFile').files[0];$('draftFil
 };
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 fields();render();
+const exportText=document.createElement('button');exportText.id='exportText';exportText.type='button';exportText.textContent='导出纯文字稿 TXT';$('save').parentElement.after(exportText);
+const textHint=document.createElement('p');textHint.className='hint';textHint.textContent='纯文字稿保留字段标签与原文，不包含排版，也不能重新导入为编辑稿。即使画布溢出仍可导出文字。不会清除未保存提醒；分享前人工检查私人信息。';exportText.after(textHint);
+function plainTextDraft(){return '卡片文字稿 · '+specs[kind].name+'\n\n'+specs[kind].fields.map(([key,label])=>'【'+label+'】\n'+(values[key]||'')).join('\n\n')+'\n';}
+exportText.onclick=()=>{const content=plainTextDraft(),blob=new Blob(['\ufeff'+content],{type:'text/plain;charset=utf-8'});if(blob.size>1024*1024){status('文字稿超过1MiB，暂停导出；原文仍保留，请分段整理。',true);return;}download(blob,'card-text.txt');status('已请求下载纯文字稿，请检查下载文件。文字稿不是可编辑JSON；未保存提醒保持不变。');};

@@ -1,3 +1,4 @@
 test-output/
 .agent-handoff/
 node_modules/
+text-export-evidence/
